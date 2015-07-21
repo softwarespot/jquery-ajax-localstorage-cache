@@ -13,7 +13,8 @@
 
         // Strip _={timestamp}, if cache is set to false
         if (options.cache === false) {
-            url = url.replace(/\??_=\d{13}/, '');
+            // Regex found in ajax.js
+            url = url.replace(/([?&])_=[^&]*/, '');
         }
 
         return options.cacheKey || url + options.type + (options.data || '');
