@@ -41,7 +41,7 @@
         var storage = (options.localCache === true) ? window.localStorage : options.localCache;
 
         // Check if the storage is not an instance of Storage
-        if ((storage instanceof Storage) === false) {
+        if (!('getItem' in storage) || !('removeItem' in storage) || !('setItem' in storage)) {
             console.log('Ajax Local Storage [Storage Error]: The local cache option is not a valid Storage object');
             return;
         }
