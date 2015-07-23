@@ -55,7 +55,13 @@
 
         var CACHE_TTL_PREFIX = '_cachettl';
 
-        var ttl = storage.getItem(cacheKey + CACHE_TTL_PREFIX);
+        var ttl = parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX));
+
+        // Check if ttl is a valid integer
+        if (isNaN(ttl)) {
+            ttl = 0;
+        }
+
         if (ttl && ttl < +new Date()) { // Or new Date().valueOf()
             console.log('Ajax Local Storage: Removing "' + cacheKey + '" and ' + '"' + cacheKey + 'cachettl" from the storage');
             storage.removeItem(cacheKey);
@@ -92,7 +98,7 @@
             };
 
             // Store timestamp
-            if (!ttl) {
+            if (ttl === 0) {
                 // 3600000 is the same as 1000 * 60 * 60, which is basically 1 hour
                 storage.setItem(cacheKey + CACHE_TTL_PREFIX, +new Date() + 3600000 * (options.cacheTTL > 0 ? options.cacheTTL : 1));
             }
