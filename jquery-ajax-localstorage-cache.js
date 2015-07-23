@@ -56,7 +56,7 @@
         var CACHE_TTL_PREFIX = '_cachettl';
 
         var ttl = storage.getItem(cacheKey + CACHE_TTL_PREFIX);
-        if (ttl && ttl < +new Date()) {
+        if (ttl && ttl < +new Date()) { // Or new Date().valueOf()
             console.log('Ajax Local Storage: Removing "' + cacheKey + '" and ' + '"' + cacheKey + 'cachettl" from the storage');
             storage.removeItem(cacheKey);
             storage.removeItem(cacheKey + CACHE_TTL_PREFIX);
