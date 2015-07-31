@@ -123,6 +123,10 @@
                 storage.setItem(cacheKey + CACHE_TTL_PREFIX, +new Date() + 60000 * (options.cacheTTL > 0 ? options.cacheTTL : 60));
 
             }
+        } else {
+
+            console.log('Ajax Local Storage: It appears the data is already cached in storage');
+
         }
 
     });
