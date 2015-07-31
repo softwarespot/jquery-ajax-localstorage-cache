@@ -19,8 +19,9 @@
             return options.cacheKey || url + options.type + (options.data || '');
         },
 
+        // Is a valid storage object that can be used
         isStorage = function(storage) {
-            return typeof storage !== 'object' || !('getItem' in storage) || !('removeItem' in storage) || !('setItem' in storage);
+            return typeof storage === 'object' && 'getItem' in storage && 'removeItem' in storage && 'setItem' in storage;
         };
 
     /**
