@@ -8,20 +8,27 @@
      * or one generated from the url, the type and, if present, the data
      */
     var getCacheKey = function(options) {
-            var url = options.url.replace(/jQuery.*/, '');
+
+            var url = options.url.replace(/jQuery.*/i, '');
 
             // Strip _={timestamp}, if cache is set to false
             if (options.cache === false) {
+
                 // Regex found in ajax.js
                 url = url.replace(/([?&])_=[^&]*/, '');
+
             }
 
             return options.cacheKey || url + options.type + (options.data || '');
+
         },
 
         // Is a valid storage object that can be used
         isStorage = function(storage) {
+
+            // The functions that are required for this plugin
             return typeof storage === 'object' && 'getItem' in storage && 'removeItem' in storage && 'setItem' in storage;
+
         };
 
     /**
@@ -48,35 +55,44 @@
 
         // Check if the storage is valid
         if (!isStorage(storage)) {
+
             console.log('Ajax Local Storage [Storage Error]: The local cache option is not a valid Storage object');
             return;
+
         }
 
+        // Get the cache key based on the ajax options
         var cacheKey = getCacheKey(options),
+
+            // Function to check if the storage data is valid
             isCacheValid = options.isCacheValid;
 
         if (isCacheValid && typeof isCacheValid === 'function' && isCacheValid() === false) {
 
-            console.log('Ajax Local Storage: Removing "' + cacheKey + '" from the storage');
             storage.removeItem(cacheKey);
+            console.log('Ajax Local Storage: Removing "' + cacheKey + '" from the storage');
 
         }
 
-        var CACHE_TTL_PREFIX = '_cachettl';
+        // Constant for the cache post-fix
+        var CACHE_TTL_PREFIX = '_cachettl',
 
-        var ttl = parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX));
+            // Parse the cache 'Time To Live' as an number from storage
+            ttl = parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX));
 
         // Check if ttl is a valid integer
         if (isNaN(ttl)) {
+
             ttl = 0;
+
         }
 
         if (ttl && ttl < +new Date()) { // Or new Date().valueOf()
 
-            console.log('Ajax Local Storage: Removing "' + cacheKey + '" and ' + '"' + cacheKey + 'cachettl" from the storage');
             storage.removeItem(cacheKey);
             storage.removeItem(cacheKey + CACHE_TTL_PREFIX);
             ttl = 0;
+            console.log('Ajax Local Storage: Removing "' + cacheKey + '" and ' + '"' + cacheKey + '_cachettl" from the storage');
 
         }
 
@@ -91,8 +107,10 @@
             options.success = function(data) {
                 var response = data;
                 if (this.dataType.toUpperCase().indexOf('JSON') === 0) {
-                    console.log('Ajax Local Storage: Stringifying to json');
+
                     response = JSON.stringify(data);
+                    console.log('Ajax Local Storage: Stringifying to json');
+
                 }
 
                 // Save the data to storage catching exceptions (possibly QUOTA_EXCEEDED_ERR)
@@ -152,7 +170,10 @@
 
             }
 
+            // Get the cache key based on the ajax options
             var cacheKey = getCacheKey(options),
+
+                // Get the value from storage
                 value = storage.getItem(cacheKey);
 
             if (value) {
