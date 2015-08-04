@@ -1,25 +1,29 @@
-/* global Storage */
 /**
  * https://github.com/SaneMethod/jquery-ajax-localstorage-cache
  */
-; (function($, window, document, Storage, undefined) {
+; (function($, window, document, undefined) {
     /**
      * Generate the cache key under which to store the local data - either the cache key supplied,
      * or one generated from the url, the type and, if present, the data
      */
     var getCacheKey = function(options) {
 
+            // If a string and not whitespace, then use the cacheKey
+            if (typeof options.cacheKey === 'string' && options.cacheKey.trim().length > 0) {
+                return options.cacheKey;
+            }
+
             var url = options.url.replace(/jQuery.*/i, '');
 
             // Strip _={timestamp}, if cache is set to false
             if (options.cache === false) {
 
-                // Regex found in ajax.js
+                // Regex found in jQuery/ajax.js
                 url = url.replace(/([?&])_=[^&]*/, '');
 
             }
 
-            return options.cacheKey || url + options.type + (options.data || '');
+            return url + '_' + options.type + (options.data || '');
 
         },
 
@@ -51,7 +55,7 @@
             return;
         }
 
-        var storage = (options.localCache === true) ? window.localStorage : options.localCache;
+        var storage = options.localCache === true ? window.localStorage : options.localCache;
 
         // Check if the storage is valid
         if (!isStorage(storage)) {
@@ -201,4 +205,4 @@
         }
 
     });
-})(jQuery, window, document, Storage);
+})(jQuery, window, document);
