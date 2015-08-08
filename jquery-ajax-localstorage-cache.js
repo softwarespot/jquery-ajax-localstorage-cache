@@ -1,39 +1,9 @@
+/* global jQuery */
+
 /**
  * https://github.com/SaneMethod/jquery-ajax-localstorage-cache
  */
-; (function($, window, document, undefined) {
-    /**
-     * Generate the cache key under which to store the local data - either the cache key supplied,
-     * or one generated from the url, the type and, if present, the data
-     */
-    var getCacheKey = function(options) {
-
-            // If a string and not whitespace, then use the cacheKey
-            if (typeof options.cacheKey === 'string' && options.cacheKey.trim().length > 0) {
-                return options.cacheKey;
-            }
-
-            var url = options.url.replace(/jQuery.*/i, '');
-
-            // Strip _={timestamp}, if cache is set to false
-            if (options.cache === false) {
-
-                // Regex found in jQuery/ajax.js
-                url = url.replace(/([?&])_=[^&]*/, '');
-
-            }
-
-            return url + '_' + options.type + (options.data || '');
-
-        },
-
-        // Is a valid storage object that can be used
-        isStorage = function(storage) {
-
-            // The functions that are required for this plugin
-            return typeof storage === 'object' && 'getItem' in storage && 'removeItem' in storage && 'setItem' in storage;
-
-        };
+; (function ($, window, document, undefined) {
 
     /**
      * Prefilter for caching ajax calls
@@ -44,10 +14,11 @@
      * cacheTTL     : 5,        // optional - Cache time in minutes, default is 60 (1 hour)
      * cacheKey     : 'post',   // optional - Key under which cached string will be stored
      * isCacheValid : function  // optional - Function that should return either true (valid) or false (invalid)
+     * cacheTTLAppend : '_cachettl' // optional - Append to the cacheTTL key
      * @method $.ajaxPrefilter
      * @param options {Object} Options for the ajax call, modified with ajax standard settings
      */
-    $.ajaxPrefilter(function(options) {
+    $.ajaxPrefilter(function (options) {
 
         // If not defined (even though it should be) consider that the user has included the function on each page
         // for convenience
@@ -60,7 +31,7 @@
         // Check if the storage is valid
         if (!isStorage(storage)) {
 
-            console.log('Ajax Local Storage [Storage Error]: The local cache option is not a valid Storage object');
+            console.log('Ajax Local Storage [Storage Error]: The local cache option is not a valid Storage-like object');
             return;
 
         }
@@ -71,15 +42,15 @@
             // Function to check if the storage data is valid
             isCacheValid = options.isCacheValid;
 
-        if (isCacheValid && typeof isCacheValid === 'function' && isCacheValid() === false) {
+        if (isCacheValid && typeof isCacheValid === 'function' && !isCacheValid()) {
 
             storage.removeItem(cacheKey);
-            console.log('Ajax Local Storage: Removing "' + cacheKey + '" from the storage');
+            console.log('Ajax Local Storage: Removing "%s" from the storage', cacheKey);
 
         }
 
-        // Constant for the cache post-fix
-        var CACHE_TTL_PREFIX = '_cachettl',
+        // Constant for the cache post-fix, if a string and the length is greater than zero
+        var CACHE_TTL_PREFIX = typeof options.cacheTTLAppend === 'string' && options.cacheTTLAppend.length > 0 ? options.cacheTTLAppend : '_cachettl',
 
             // Parse the cache 'Time To Live' as an number from storage
             ttl = parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX));
@@ -96,7 +67,7 @@
             storage.removeItem(cacheKey);
             storage.removeItem(cacheKey + CACHE_TTL_PREFIX);
             ttl = 0;
-            console.log('Ajax Local Storage: Removing "' + cacheKey + '" and ' + '"' + cacheKey + '_cachettl" from the storage');
+            console.log('Ajax Local Storage: Removing "%s" and "%s_cachettl" from the storage', cacheKey);
 
         }
 
@@ -108,7 +79,7 @@
 
             }
 
-            options.success = function(data) {
+            options.success = function (data) {
                 var response = data;
                 if (this.dataType.toUpperCase().indexOf('JSON') === 0) {
 
@@ -127,7 +98,7 @@
                     // Remove any incomplete data that may have been saved before the exception was caught
                     storage.removeItem(cacheKey);
                     storage.removeItem(cacheKey + CACHE_TTL_PREFIX);
-                    console.log('Ajax Local Storage [Cache Error]:' + e, cacheKey, response);
+                    console.log('Ajax Local Storage [Cache Error]: %o', e, cacheKey, response);
 
                 }
 
@@ -160,7 +131,7 @@
      * @method $.ajaxTransport
      * @params options {Object} Options for the ajax call, modified with ajax standard settings
      */
-    $.ajaxTransport('+*', function(options) {
+    $.ajaxTransport('+*', function (options) {
 
         if (typeof options.localCache !== 'undefined' && options.localCache) {
 
@@ -191,13 +162,13 @@
                 }
 
                 return {
-                    send: function(headers, completeCallback) {
+                    send: function (headers, completeCallback) {
                         console.log('Ajax Local Storage: Sending to complete callback function');
                         var response = {};
                         response[options.dataType] = value;
                         completeCallback(200, 'success', response, '');
                     },
-                    abort: function() {
+                    abort: function () {
                         console.log('Ajax Local Storage [Error]: Aborted ajax transport for json cache');
                     }
                 };
@@ -205,4 +176,36 @@
         }
 
     });
+
+    // Generate the cache key under which to store the local data - either the cache key supplied,
+    // or one generated from the url, the type and, if present, the data
+    var getCacheKey = function (options) {
+
+        // If a string and not whitespace, then use the cacheKey
+        if (typeof options.cacheKey === 'string' && options.cacheKey.trim().length > 0) {
+            return options.cacheKey;
+        }
+
+        var url = options.url.replace(/jQuery.*/i, '');
+
+        // Strip _={timestamp}, if cache is set to false
+        if (options.cache === false) {
+
+            // Regex found in jQuery/ajax.js
+            url = url.replace(/([?&])_=[^&]*/, '');
+
+        }
+
+        return url + '_' + options.type + (options.data || '');
+
+    };
+
+    // Is a valid storage object that can be used
+    var isStorage = function (storage) {
+
+        // The functions that are required for this plugin only
+        return typeof storage === 'object' && 'getItem' in storage && 'removeItem' in storage && 'setItem' in storage;
+
+    };
+
 })(jQuery, window, document);
