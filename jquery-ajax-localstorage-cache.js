@@ -22,7 +22,7 @@
 
         // If not defined (even though it should be) consider that the user has included the function on each page
         // for convenience
-        if (typeof options.localCache === 'undefined') {
+        if ($.type(options.localCache) === 'undefined') {
             return;
         }
 
@@ -42,7 +42,7 @@
             // Function to check if the storage data is valid
             isCacheValid = options.isCacheValid;
 
-        if (isCacheValid && typeof isCacheValid === 'function' && !isCacheValid()) {
+        if ($.isFunction(isCacheValid) && !isCacheValid()) {
 
             storage.removeItem(cacheKey);
             console.log('Ajax Local Storage: Removing "%s" from the storage', cacheKey);
@@ -50,13 +50,14 @@
         }
 
         // Constant for the cache post-fix, if a string and the length is greater than zero
-        var CACHE_TTL_PREFIX = typeof options.cacheTTLAppend === 'string' && options.cacheTTLAppend.length > 0 ? options.cacheTTLAppend : '_cachettl',
+        var CACHE_TTL_PREFIX = $.type(options.cacheTTLAppend) === 'string' && options.cacheTTLAppend.length > 0 ? options.cacheTTLAppend : '_cachettl',
 
             // Parse the cache 'Time To Live' as an number from storage
             ttl = parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX));
 
         // Check if ttl is a valid integer
-        if (isNaN(ttl)) {
+        // In ES2015, Number.isNaN should be used. See for more details: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN
+        if ($.type(ttl) ==='number' && isNaN(ttl)) {
 
             ttl = 0;
 
@@ -133,7 +134,7 @@
      */
     $.ajaxTransport('+*', function (options) {
 
-        if (typeof options.localCache !== 'undefined' && options.localCache) {
+        if ($.type(options.localCache) !== 'undefined' && options.localCache) {
 
             var storage = (options.localCache === true) ? window.localStorage : options.localCache;
 
@@ -186,7 +187,7 @@
     var getCacheKey = function (options) {
 
         // If a string and not whitespace, then use the cacheKey
-        if (typeof options.cacheKey === 'string' && options.cacheKey.trim().length > 0) {
+        if ($.type(options.cacheKey) === 'string' && options.cacheKey.trim().length > 0) {
             return options.cacheKey;
         }
 
@@ -208,7 +209,7 @@
     var isStorage = function (storage) {
 
         // The functions that are required for this plugin only
-        return typeof storage === 'object' &&
+        return $.type(storage) === 'object' &&
             'getItem' in storage &&
             'removeItem' in storage &&
             'setItem' in storage;
