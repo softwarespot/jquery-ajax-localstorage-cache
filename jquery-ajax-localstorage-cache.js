@@ -163,13 +163,17 @@
 
                 return {
                     send: function (headers, completeCallback) {
+
                         console.log('Ajax Local Storage: Sending to complete callback function');
                         var response = {};
                         response[options.dataType] = value;
                         completeCallback(200, 'success', response, '');
+
                     },
                     abort: function () {
+
                         console.log('Ajax Local Storage [Error]: Aborted ajax transport for json cache');
+
                     }
                 };
             }
@@ -204,7 +208,10 @@
     var isStorage = function (storage) {
 
         // The functions that are required for this plugin only
-        return typeof storage === 'object' && 'getItem' in storage && 'removeItem' in storage && 'setItem' in storage;
+        return typeof storage === 'object' &&
+            'getItem' in storage &&
+            'removeItem' in storage &&
+            'setItem' in storage;
 
     };
 
