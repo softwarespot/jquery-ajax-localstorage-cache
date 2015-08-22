@@ -1,5 +1,5 @@
 {
-  "name": "softwarespot/jquery-handlebars",
+  "name": "jquery-ajax-localstorage-cache",
   "homepage": "https://github.com/softwarespot/jquery-ajax-localstorage-cache.git",
   "description": "Ajax local storage cache",
   "main": "jquery-ajax-localstorage-cache.js",
