@@ -31,7 +31,7 @@
         // Check if the storage is valid
         if (!isStorage(storage)) {
 
-            console.log('Ajax Local Storage [Storage Error]: The local cache option is not a valid Storage-like object');
+            // console.log('Ajax Local Storage [Storage Error]: The local cache option is not a valid Storage-like object');
             return;
 
         }
@@ -45,7 +45,7 @@
         if ($.isFunction(isCacheValid) && !isCacheValid()) {
 
             storage.removeItem(cacheKey);
-            console.log('Ajax Local Storage: Removing "%s" from the storage', cacheKey);
+            // console.log('Ajax Local Storage: Removing "%s" from the storage', cacheKey);
 
         }
 
@@ -68,7 +68,7 @@
             storage.removeItem(cacheKey);
             storage.removeItem(cacheKey + CACHE_TTL_PREFIX);
             ttl = 0;
-            console.log('Ajax Local Storage: Removing "%s" and "%s_cachettl" from the storage', cacheKey);
+            // console.log('Ajax Local Storage: Removing "%s" and "%s_cachettl" from the storage', cacheKey);
 
         }
 
@@ -85,7 +85,7 @@
                 if (this.dataType.toUpperCase().indexOf('JSON') === 0) {
 
                     response = JSON.stringify(data);
-                    console.log('Ajax Local Storage: Stringifying to json');
+                    // console.log('Ajax Local Storage: Stringifying to json');
 
                 }
 
@@ -99,7 +99,7 @@
                     // Remove any incomplete data that may have been saved before the exception was caught
                     storage.removeItem(cacheKey);
                     storage.removeItem(cacheKey + CACHE_TTL_PREFIX);
-                    console.log('Ajax Local Storage [Cache Error]: %o', e, cacheKey, response);
+                    // console.log('Ajax Local Storage [Cache Error]: %o', e, cacheKey, response);
 
                 }
 
@@ -119,7 +119,7 @@
             }
         } else {
 
-            console.log('Ajax Local Storage: It appears the data is already cached in storage');
+            // console.log('Ajax Local Storage: It appears the data is already cached in storage');
 
         }
 
@@ -141,7 +141,7 @@
             // Check if the storage is valid
             if (!isStorage(storage)) {
 
-                console.log('Ajax Local Storage [Storage Error]: The local cache option is not a valid Storage object');
+                // console.log('Ajax Local Storage [Storage Error]: The local cache option is not a valid Storage object');
                 return;
 
             }
@@ -157,7 +157,7 @@
                 // and call the completeCallback with the fetched value.
                 if (options.dataType.toUpperCase().indexOf('JSON') === 0) {
 
-                    console.log('Ajax Local Storage: Parsing as json');
+                    // console.log('Ajax Local Storage: Parsing as json');
                     value = JSON.parse(value);
 
                 }
@@ -165,7 +165,7 @@
                 return {
                     send: function (headers, completeCallback) {
 
-                        console.log('Ajax Local Storage: Sending to complete callback function');
+                        // console.log('Ajax Local Storage: Sending to complete callback function');
                         var response = {};
                         response[options.dataType] = value;
                         completeCallback(200, 'success', response, '');
@@ -173,7 +173,7 @@
                     },
                     abort: function () {
 
-                        console.log('Ajax Local Storage [Error]: Aborted ajax transport for json cache');
+                        // console.log('Ajax Local Storage [Error]: Aborted ajax transport for json cache');
 
                     }
                 };
