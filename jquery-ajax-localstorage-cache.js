@@ -37,10 +37,10 @@
         }
 
         // Get the cache key based on the ajax options
-        var cacheKey = getCacheKey(options),
+        var cacheKey = getCacheKey(options);
 
-            // Function to check if the storage data is valid
-            isCacheValid = options.isCacheValid;
+        // Function to check if the storage data is valid
+        var isCacheValid = options.isCacheValid;
 
         if ($.isFunction(isCacheValid) && !isCacheValid()) {
 
@@ -50,14 +50,14 @@
         }
 
         // Constant for the cache post-fix, if a string and the length is greater than zero
-        var CACHE_TTL_PREFIX = $.type(options.cacheTTLAppend) === 'string' && options.cacheTTLAppend.length > 0 ? options.cacheTTLAppend : '_cachettl',
+        var CACHE_TTL_PREFIX = $.type(options.cacheTTLAppend) === 'string' && options.cacheTTLAppend.length > 0 ? options.cacheTTLAppend : '_cachettl';
 
-            // Parse the cache 'Time To Live' as an number from storage
-            ttl = parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX));
+        // Parse the cache 'Time To Live' as an number from storage
+        var ttl = parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX));
 
         // Check if ttl is a valid integer
         // In ES2015, Number.isNaN should be used. See for more details: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN
-        if ($.type(ttl) ==='number' && isNaN(ttl)) {
+        if ($.type(ttl) === 'number' && isNaN(ttl)) {
 
             ttl = 0;
 
@@ -147,10 +147,10 @@
             }
 
             // Get the cache key based on the ajax options
-            var cacheKey = getCacheKey(options),
+            var cacheKey = getCacheKey(options);
 
-                // Get the value from storage
-                value = storage.getItem(cacheKey);
+            // Get the value from storage
+            var value = storage.getItem(cacheKey);
 
             if (value) {
                 // In the cache? Get it, parse it to json if the dataType is json,
@@ -184,7 +184,7 @@
 
     // Generate the cache key under which to store the local data - either the cache key supplied,
     // or one generated from the url, the type and, if present, the data
-    var getCacheKey = function (options) {
+    function getCacheKey(options) {
 
         // If a string and not whitespace, then use the cacheKey
         if ($.type(options.cacheKey) === 'string' && options.cacheKey.trim().length > 0) {
@@ -203,10 +203,10 @@
 
         return url + '_' + options.type + (options.data || '');
 
-    };
+    }
 
     // Is a valid storage object that can be used
-    var isStorage = function (storage) {
+    function isStorage(storage) {
 
         // The functions that are required for this plugin only
         return $.type(storage) === 'object' &&
@@ -214,6 +214,6 @@
             'removeItem' in storage &&
             'setItem' in storage;
 
-    };
+    }
 
 })(jQuery, window, document);
