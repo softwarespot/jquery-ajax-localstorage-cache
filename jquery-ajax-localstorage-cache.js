@@ -53,7 +53,7 @@
         // Constant for the cache post-fix, if a string and the length is greater than zero
         var CACHE_TTL_PREFIX = $.type(options.cacheTTLAppend) === 'string' && options.cacheTTLAppend.length > 0 ? options.cacheTTLAppend : '_cachettl';
 
-        // Parse the cache 'Time To Live' as an number from storage
+        // Parse the cache 'Time To Live' as an number from storage. In ES2015 this is now Number.parseInt()
         var ttl = parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX));
 
         // Check if ttl is a valid integer
