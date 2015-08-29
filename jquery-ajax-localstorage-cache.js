@@ -3,7 +3,8 @@
 /**
  * https://github.com/SaneMethod/jquery-ajax-localstorage-cache
  */
-; (function ($, window, document, undefined) {
+; // jshint ignore:line
+(function ($, window, document, undefined) {
 
     /**
      * Prefilter for caching ajax calls
