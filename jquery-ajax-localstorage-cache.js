@@ -37,11 +37,11 @@
 
         }
 
-        // Get the cache key based on the ajax options
-        var cacheKey = getCacheKey(options);
-
         // Function to check if the storage data is valid
         var isCacheValid = options.isCacheValid;
+
+        // Get the cache key based on the ajax options
+        var cacheKey = getCacheKey(options);
 
         if ($.isFunction(isCacheValid) && !isCacheValid()) {
 
@@ -168,6 +168,7 @@
 
                         // console.log('Ajax Local Storage: Sending to complete callback function');
                         var response = {};
+
                         response[options.dataType] = value;
                         completeCallback(200, 'success', response, '');
 
