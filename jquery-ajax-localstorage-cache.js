@@ -1,5 +1,3 @@
-/* global jQuery */
-
 /**
  * https://github.com/SaneMethod/jquery-ajax-localstorage-cache
  */
