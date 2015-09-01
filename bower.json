@@ -1,7 +1,7 @@
 {
   "name": "jquery-ajax-localstorage-cache",
   "homepage": "https://github.com/softwarespot/jquery-ajax-localstorage-cache.git",
-  "description": "Ajax local storage cache",
+  "description": "Store ajax responses using the browser's local storage cache",
   "main": "jquery-ajax-localstorage-cache.js",
   "keywords": [
     "ajax",
