@@ -18,7 +18,6 @@
      * @param options {Object} Options for the ajax call, modified with ajax standard settings
      */
     $.ajaxPrefilter(function (options) {
-
         // If not defined (even though it should be) consider that the user has included the function on each page
         // for convenience
         if ($.type(options.localCache) === 'undefined') {
@@ -29,10 +28,7 @@
 
         // Check if the storage is valid
         if (!isStorage(storage)) {
-
-            // console.log('Ajax Local Storage [Storage Error]: The local cache option is not a valid Storage-like object');
             return;
-
         }
 
         // Function to check if the storage data is valid
@@ -42,10 +38,7 @@
         var cacheKey = getCacheKey(options);
 
         if ($.isFunction(isCacheValid) && !isCacheValid()) {
-
             storage.removeItem(cacheKey);
-            // console.log('Ajax Local Storage: Removing "%s" from the storage', cacheKey);
-
         }
 
         // Constant for the cache post-fix, if a string and the length is greater than zero
@@ -57,71 +50,47 @@
         // Check if ttl is a valid integer
         // In ES2015, Number.isNaN should be used. See for more details: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN
         if ($.type(ttl) === 'number' && isNaN(ttl)) {
-
             ttl = 0;
-
         }
 
         if (ttl && ttl < +new Date()) { // Or new Date().valueOf()
-
             storage.removeItem(cacheKey);
             storage.removeItem(cacheKey + CACHE_TTL_PREFIX);
             ttl = 0;
-            // console.log('Ajax Local Storage: Removing "%s" and "%s_cachettl" from the storage', cacheKey);
-
         }
 
         if (!storage.getItem(cacheKey)) {
             // If it not in the cache, store the data, add success callback - normal callback will proceed
             if (options.success) {
-
                 options.realsuccess = options.success;
-
             }
 
             options.success = function (data) {
                 var response = data;
                 if (this.dataType.toUpperCase().indexOf('JSON') === 0) {
-
                     response = JSON.stringify(data);
-                    // console.log('Ajax Local Storage: Stringifying to json');
-
                 }
 
                 // Save the data to storage catching exceptions (possibly QUOTA_EXCEEDED_ERR)
                 try {
-
                     storage.setItem(cacheKey, response);
-
                 } catch (e) {
-
                     // Remove any incomplete data that may have been saved before the exception was caught
                     storage.removeItem(cacheKey);
                     storage.removeItem(cacheKey + CACHE_TTL_PREFIX);
-                    // console.log('Ajax Local Storage [Cache Error]: %o', e, cacheKey, response);
-
                 }
 
                 if (options.realsuccess) {
-
                     options.realsuccess(data);
-
                 }
             };
 
             // Store timestamp
             if (ttl === 0) {
-
                 // 60000 is the same as 1000 * 60, which is basically 1 minute
                 storage.setItem(cacheKey + CACHE_TTL_PREFIX, +new Date() + 60000 * (options.cacheTTL > 0 ? options.cacheTTL : 60));
-
             }
-        } else {
-
-            // console.log('Ajax Local Storage: It appears the data is already cached in storage');
-
         }
-
     });
 
     /**
@@ -132,17 +101,12 @@
      * @params options {Object} Options for the ajax call, modified with ajax standard settings
      */
     $.ajaxTransport('+*', function (options) {
-
         if ($.type(options.localCache) !== 'undefined' && options.localCache) {
-
             var storage = (options.localCache === true) ? window.localStorage : options.localCache;
 
             // Check if the storage is valid
             if (!isStorage(storage)) {
-
-                // console.log('Ajax Local Storage [Storage Error]: The local cache option is not a valid Storage object');
                 return;
-
             }
 
             // Get the cache key based on the ajax options
@@ -155,27 +119,16 @@
                 // In the cache? Get it, parse it to json if the dataType is json,
                 // and call the completeCallback with the fetched value.
                 if (options.dataType.toUpperCase().indexOf('JSON') === 0) {
-
-                    // console.log('Ajax Local Storage: Parsing as json');
                     value = JSON.parse(value);
-
                 }
 
                 return {
                     send: function (headers, completeCallback) {
-
-                        // console.log('Ajax Local Storage: Sending to complete callback function');
                         var response = {};
-
                         response[options.dataType] = value;
                         completeCallback(200, 'success', response, '');
-
                     },
-                    abort: function () {
-
-                        // console.log('Ajax Local Storage [Error]: Aborted ajax transport for json cache');
-
-                    }
+                    abort: function () {}
                 };
             }
         }
@@ -185,7 +138,6 @@
     // Generate the cache key under which to store the local data - either the cache key supplied,
     // or one generated from the url, the type and, if present, the data
     function getCacheKey(options) {
-
         // If a string and not whitespace, then use the cacheKey
         if ($.type(options.cacheKey) === 'string' && options.cacheKey.trim().length > 0) {
             return options.cacheKey;
@@ -202,18 +154,15 @@
         }
 
         return url + '_' + options.type + (options.data || '');
-
     }
 
     // Is a valid storage object that can be used
     function isStorage(storage) {
-
         // The functions that are required for this plugin only
         return $.type(storage) === 'object' &&
             'getItem' in storage &&
             'removeItem' in storage &&
             'setItem' in storage;
-
     }
 
 })(jQuery, window, document);
