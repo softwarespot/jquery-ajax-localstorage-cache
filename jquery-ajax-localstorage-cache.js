@@ -2,7 +2,7 @@
  * https://github.com/SaneMethod/jquery-ajax-localstorage-cache
  */
 ; // jshint ignore:line
-(function ($, window) {
+(function (window, $) {
 
     /**
      * Prefilter for caching ajax calls
@@ -163,4 +163,4 @@
             'setItem' in storage;
     }
 
-})(jQuery, window);
+})(this, this.jQuery);
