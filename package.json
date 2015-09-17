@@ -2,7 +2,10 @@
   "name": "jquery-ajax-localstorage-cache",
   "version": "1.0.0",
   "license": "Apache",
-  "repository": "https://github.com/softwarespot/jquery-ajax-localstorage-cache",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/softwarespot/jquery-ajax-localstorage-cache.git"
+  },
   "devDependencies": {
     "del": "~1.2.1",
     "gulp": "~3.9.0",
