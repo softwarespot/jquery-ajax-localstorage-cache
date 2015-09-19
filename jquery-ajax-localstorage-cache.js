@@ -2,7 +2,7 @@
  * https://github.com/SaneMethod/jquery-ajax-localstorage-cache
  */
 ; // jshint ignore:line
-(function (window, $) {
+(function (window, $, undefined) {
 
     /**
      * Prefilter for caching ajax calls
@@ -20,7 +20,7 @@
     $.ajaxPrefilter(function (options) {
         // If not defined (even though it should be) consider that the user has included the function on each page
         // for convenience
-        if ($.type(options.localCache) === 'undefined') {
+        if (options.localCache === undefined) {
             return;
         }
 
@@ -101,7 +101,7 @@
      * @params options {Object} Options for the ajax call, modified with ajax standard settings
      */
     $.ajaxTransport('+*', function (options) {
-        if ($.type(options.localCache) !== 'undefined' && options.localCache) {
+        if (options.localCache !== undefined && options.localCache) {
             var storage = (options.localCache === true) ? window.localStorage : options.localCache;
 
             // Check if the storage is valid
