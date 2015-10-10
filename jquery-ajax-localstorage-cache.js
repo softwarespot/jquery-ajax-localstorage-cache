@@ -65,7 +65,7 @@
                 options.realsuccess = options.success;
             }
 
-            options.success = function (data) {
+            options.success = function success(data) {
                 var response = data;
                 if (this.dataType.toUpperCase().indexOf('JSON') === 0) {
                     response = JSON.stringify(data);
@@ -123,12 +123,12 @@
                 }
 
                 return {
-                    send: function (headers, completeCallback) {
+                    send: function send(headers, completeCallback) {
                         var response = {};
                         response[options.dataType] = value;
                         completeCallback(200, 'success', response, '');
                     },
-                    abort: function () {}
+                    abort: function abort() {}
                 };
             }
         }
