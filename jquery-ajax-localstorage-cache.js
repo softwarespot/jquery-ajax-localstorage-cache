@@ -17,7 +17,7 @@
      * @method $.ajaxPrefilter
      * @param options {Object} Options for the ajax call, modified with ajax standard settings
      */
-    $.ajaxPrefilter(function (options) {
+    $.ajaxPrefilter(function ajaxPrefilter(options) {
         // If not defined (even though it should be) consider that the user has included the function on each page
         // for convenience
         if (options.localCache === undefined) {
