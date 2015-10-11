@@ -27,7 +27,7 @@
         var storage = options.localCache === true ? window.localStorage : options.localCache;
 
         // Check if the storage is valid
-        if (!isStorage(storage)) {
+        if (!_isStorage(storage)) {
             return;
         }
 
@@ -35,7 +35,7 @@
         var isCacheValid = options.isCacheValid;
 
         // Get the cache key based on the ajax options
-        var cacheKey = getCacheKey(options);
+        var cacheKey = _getCacheKey(options);
 
         if ($.isFunction(isCacheValid) && !isCacheValid()) {
             storage.removeItem(cacheKey);
@@ -45,7 +45,7 @@
         var CACHE_TTL_PREFIX = $.type(options.cacheTTLAppend) === 'string' && options.cacheTTLAppend.length > 0 ? options.cacheTTLAppend : '_cachettl';
 
         // Parse the cache 'Time To Live' as an number from storage. In ES2015 this is now Number.parseInt()
-        var ttl = parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX));
+        var ttl = window.parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX));
 
         // Check if ttl is a valid integer
         // In ES2015 this is now Number.isNaN()
@@ -68,7 +68,7 @@
             options.success = function success(data) {
                 var response = data;
                 if (this.dataType.toUpperCase().indexOf('JSON') === 0) {
-                    response = JSON.stringify(data);
+                    response = window.JSON.stringify(data);
                 }
 
                 // Save the data to storage catching exceptions (possibly QUOTA_EXCEEDED_ERR)
@@ -105,12 +105,12 @@
             var storage = (options.localCache === true) ? window.localStorage : options.localCache;
 
             // Check if the storage is valid
-            if (!isStorage(storage)) {
+            if (!_isStorage(storage)) {
                 return;
             }
 
             // Get the cache key based on the ajax options
-            var cacheKey = getCacheKey(options);
+            var cacheKey = _getCacheKey(options);
 
             // Get the value from storage
             var value = storage.getItem(cacheKey);
@@ -119,7 +119,7 @@
                 // In the cache? Get it, parse it to json if the dataType is json,
                 // and call the completeCallback with the fetched value.
                 if (options.dataType.toUpperCase().indexOf('JSON') === 0) {
-                    value = JSON.parse(value);
+                    value = window.JSON.parse(value);
                 }
 
                 return {
@@ -138,7 +138,7 @@
 
     // Generate the cache key under which to store the local data - either the cache key supplied,
     // or one generated from the url, the type and, if present, the data
-    function getCacheKey(options) {
+    function _getCacheKey(options) {
         // If a string and not whitespace, then use the cacheKey
         if ($.type(options.cacheKey) === 'string' && options.cacheKey.trim().length > 0) {
             return options.cacheKey;
@@ -156,7 +156,7 @@
     }
 
     // Is a valid storage object that can be used
-    function isStorage(storage) {
+    function _isStorage(storage) {
         // The functions that are required for this plugin only
         return $.type(storage) === 'object' &&
             'getItem' in storage &&
