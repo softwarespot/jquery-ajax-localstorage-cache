@@ -33,7 +33,7 @@ gulp.task('jshint', function () {
 });
 
 // Uglify aka minify the main file
-gulp.task('uglify', ['clean'], function () {
+gulp.task('uglify', function () {
     return gulp.src('./' + Assets.main)
         .pipe(uglify(uglifySettings))
         .pipe(rename(Assets.minified))
@@ -46,7 +46,7 @@ gulp.task('watch', function () {
 });
 
 // Register the default task
-gulp.task('default', ['version', 'jshint', 'uglify']);
+gulp.task('default', ['jshint', 'uglify']);
 
 // 'gulp jshint' to check the syntax
 // 'gulp uglify' to uglify the main file
