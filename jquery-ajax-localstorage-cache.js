@@ -128,6 +128,7 @@
                         response[options.dataType] = value;
                         completeCallback(200, 'success', response, '');
                     },
+
                     abort: function abort() {}
                 };
             }
