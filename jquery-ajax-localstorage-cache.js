@@ -49,11 +49,11 @@
 
         // Check if ttl is a valid integer
         // In ES2015 this is now Number.isNaN()
-        if ($.type(ttl) === 'number' && isNaN(ttl)) {
+        if ($.type(ttl) === 'number' && window.isNaN(ttl)) {
             ttl = 0;
         }
 
-        if (ttl && ttl < +new Date()) { // Or instead use new Date().valueOf()
+        if (ttl && ttl < +new window.Date()) { // Or instead use new Date().valueOf()
             storage.removeItem(cacheKey);
             storage.removeItem(cacheKey + CACHE_TTL_PREFIX);
             ttl = 0;
@@ -88,7 +88,7 @@
             // Store timestamp
             if (ttl === 0) {
                 // 60000 is the same as 1000 * 60, which is basically equal to one minute
-                storage.setItem(cacheKey + CACHE_TTL_PREFIX, +new Date() + 60000 * ($.type(options.cacheTTL) === 'number' && options.cacheTTL > 0 ? options.cacheTTL : 60));
+                storage.setItem(cacheKey + CACHE_TTL_PREFIX, +new window.Date() + 60000 * ($.type(options.cacheTTL) === 'number' && options.cacheTTL > 0 ? options.cacheTTL : 60));
             }
         }
     });
