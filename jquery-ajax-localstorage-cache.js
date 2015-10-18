@@ -3,6 +3,13 @@
  */
 ; // jshint ignore:line
 (function (window, $, undefined) {
+    // Constants
+
+    /**
+     * The request has succeeded
+     * @type {number}
+     */
+    var HTTP_STATUS_OK = 200;
 
     /**
      * Prefilter for caching ajax calls
@@ -126,7 +133,7 @@
                     send: function send(headers, completeCallback) {
                         var response = {};
                         response[options.dataType] = value;
-                        completeCallback(200, 'success', response, '');
+                        completeCallback(HTTP_STATUS_OK, 'success', response, '');
                     },
 
                     abort: function abort() {}
@@ -144,11 +151,11 @@
             return options.cacheKey;
         }
 
-        var url = options.url.replace(/jQuery.*/i, '');
+        var url = options.url.replace(/(?:jQuery.*)/i, '');
 
         // Strip _={timestamp}, if cache is set to false
         if (options.cache === false) {
-            // Regex found in jQuery/ajax.js
+            // RegExp found in jQuery/ajax.js
             url = url.replace(/([?&])_=[^&]*/, '');
         }
 
