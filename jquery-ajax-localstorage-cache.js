@@ -2,7 +2,7 @@
  * https://github.com/SaneMethod/jquery-ajax-localstorage-cache
  */
 ; // jshint ignore:line
-(function (window, $, undefined) {
+(function jQueryAjaxLocalStorageCacheNamespace(window, $, undefined) {
     // Constants
 
     /**
@@ -107,7 +107,7 @@
      * @method $.ajaxTransport
      * @params options {Object} Options for the ajax call, modified with ajax standard settings
      */
-    $.ajaxTransport('+*', function (options) {
+    $.ajaxTransport('+*', function ajaxTransport(options) {
         if (options.localCache !== undefined && options.localCache) {
             var storage = (options.localCache === true) ? window.localStorage : options.localCache;
 
@@ -136,7 +136,7 @@
                         completeCallback(HTTP_STATUS_OK, 'success', response, '');
                     },
 
-                    abort: function abort() {}
+                    abort: function abort() {},
                 };
             }
         }
@@ -171,4 +171,4 @@
             'setItem' in storage;
     }
 
-})(this, this.jQuery);
+})(window, window.jQuery);
