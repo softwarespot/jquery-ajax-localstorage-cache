@@ -7,6 +7,7 @@
 
     /**
      * The request has succeeded
+     *
      * @type {number}
      */
     var HTTP_STATUS_OK = 200;
@@ -21,8 +22,9 @@
      * cacheKey     : 'post',   // optional - Key under which cached string will be stored
      * isCacheValid : function  // optional - Function that should return either true (valid) or false (invalid)
      * cacheTTLAppend : '_cachettl' // optional - Append to the cacheTTL key
+     *
      * @method $.ajaxPrefilter
-     * @param options {Object} Options for the ajax call, modified with ajax standard settings
+     * @param options {object} Options for the ajax call, modified with ajax standard settings
      */
     $.ajaxPrefilter(function ajaxPrefilter(options) {
         // If not defined (even though it should be) consider that the user has included the function on each page
@@ -104,8 +106,9 @@
      * This function performs the fetch from cache portion of the functionality needed to cache ajax
      * calls and still fulfil the jqXHR Deferred Promise interface
      * See also $.ajaxPrefilter
+     *
      * @method $.ajaxTransport
-     * @params options {Object} Options for the ajax call, modified with ajax standard settings
+     * @params options {object} Options for the ajax call, modified with ajax standard settings
      */
     $.ajaxTransport('+*', function ajaxTransport(options) {
         if (options.localCache !== undefined && options.localCache) {
