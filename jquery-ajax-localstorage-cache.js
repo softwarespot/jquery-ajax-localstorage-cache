@@ -150,7 +150,7 @@
     // or one generated from the url, the type and, if present, the data
     function _getCacheKey(options) {
         // If a string and not whitespace, then use the cacheKey
-        if ($.type(options.cacheKey) === 'string' && options.cacheKey.trim().length > 0) {
+        if ($.type(options.cacheKey) === 'string' && $.trim(options.cacheKey).length > 0) {
             return options.cacheKey;
         }
 
