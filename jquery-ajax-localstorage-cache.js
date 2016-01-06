@@ -143,7 +143,6 @@
                 };
             }
         }
-
     });
 
     // Generate the cache key under which to store the local data - either the cache key supplied,
@@ -173,5 +172,4 @@
             'removeItem' in storage &&
             'setItem' in storage;
     }
-
 })(window, window.jQuery);
