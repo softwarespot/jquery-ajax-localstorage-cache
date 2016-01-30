@@ -1,8 +1,7 @@
 /**
  * https://github.com/SaneMethod/jquery-ajax-localstorage-cache
  */
-; // jshint ignore:line
-(function jQueryAjaxLocalStorageCacheNamespace(window, $, undefined) {
+(function jQueryAjaxLocalStorageCacheNamespace(window, $) {
     // Constants
 
     /**
@@ -97,7 +96,7 @@
             // Store timestamp
             if (ttl === 0) {
                 // 60000 is the same as 1000 * 60, which is basically equal to one minute
-                storage.setItem(cacheKey + CACHE_TTL_PREFIX, +new window.Date() + 60000 * ($.type(options.cacheTTL) === 'number' && options.cacheTTL > 0 ? options.cacheTTL : 60));
+                storage.setItem(cacheKey + CACHE_TTL_PREFIX, new window.Date().getTime() + 60000 * ($.type(options.cacheTTL) === 'number' && options.cacheTTL > 0 ? options.cacheTTL : 60));
             }
         }
     });
@@ -112,11 +111,12 @@
      */
     $.ajaxTransport('+*', function ajaxTransport(options) {
         if (options.localCache !== undefined && options.localCache) {
+            var request;
             var storage = (options.localCache === true) ? window.localStorage : options.localCache;
 
             // Check if the storage is valid
             if (!_isStorage(storage)) {
-                return;
+                return request;
             }
 
             // Get the cache key based on the ajax options
@@ -132,7 +132,7 @@
                     value = window.JSON.parse(value);
                 }
 
-                return {
+                request = {
                     send: function send(headers, completeCallback) {
                         var response = {};
                         response[options.dataType] = value;
@@ -142,6 +142,8 @@
                     abort: function abort() {},
                 };
             }
+
+            return request;
         }
     });
 
@@ -172,4 +174,4 @@
             'removeItem' in storage &&
             'setItem' in storage;
     }
-})(window, window.jQuery);
+}(window, window.jQuery));

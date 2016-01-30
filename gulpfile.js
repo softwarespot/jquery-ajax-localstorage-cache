@@ -1,14 +1,18 @@
 /* global require */
 
 var gulp = require('gulp');
-var jshint = require('gulp-jshint');
+var eslint = require('gulp-eslint');
+var gulpIf = require('gulp-if');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
+var pkg = require('./package.json');
 
 // Assets for the project
 var Assets = {
     main: './jquery-ajax-localstorage-cache.js',
     minified: './jquery-ajax-localstorage-cache.min.js',
+    package: './package.json',
+    readme: './README.md',
     source: './',
 };
 
@@ -26,11 +30,20 @@ var _uglifySettings = {
     },
 };
 
-// Check the code meets the following standards outlined in .jshintrc
-gulp.task('jshint', function jsHintTask() {
+// Check the main js file meets the following standards outlined in .eslintrc
+gulp.task('eslint', function esLintTask() {
+    // Has ESLint fixed the file contents?
+    function isFixed(file) {
+        return file.eslint !== undefined && file.eslint !== null && file.eslint.fixed;
+    }
+
     return gulp.src(Assets.main)
-        .pipe(jshint())
-        .pipe(jshint.reporter('jshint-stylish'));
+        .pipe(eslint({
+            fix: true,
+            useEslintrc: '.eslintrc',
+        }))
+        .pipe(eslint.format())
+        .pipe(gulpIf(isFixed, gulp.dest(Assets.source)));
 });
 
 // Uglify aka minify the main file
@@ -43,11 +56,12 @@ gulp.task('uglify', function uglifyTask() {
 
 // Watch for changes to the main file
 gulp.task('watch', function watchTask() {
-    gulp.watch(Assets.main, ['jshint', 'uglify']);
+    gulp.watch(Assets.main, ['eslint', 'uglify']);
 });
 
 // Register the default task
-gulp.task('default', ['jshint', 'uglify']);
+gulp.task('default', ['eslint', 'uglify']);
 
-// 'gulp jshint' to check the syntax
+// 'gulp eslint' to check the syntax of the main js file(s)
 // 'gulp uglify' to uglify the main file
+// 'gulp version' to update the version numbers based on the main file version comment
