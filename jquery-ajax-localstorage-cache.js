@@ -53,7 +53,7 @@
         var CACHE_TTL_PREFIX = $.type(options.cacheTTLAppend) === 'string' && options.cacheTTLAppend.length > 0 ? options.cacheTTLAppend : '_cachettl';
 
         // Parse the cache 'Time To Live' as an number from storage. In ES2015 this is now Number.parseInt()
-        var ttl = window.parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX));
+        var ttl = window.parseInt(storage.getItem(cacheKey + CACHE_TTL_PREFIX), 10);
 
         // Check if ttl is a valid integer
         // In ES2015 this is now Number.isNaN()
