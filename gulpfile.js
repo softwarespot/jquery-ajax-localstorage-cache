@@ -5,7 +5,6 @@ var eslint = require('gulp-eslint');
 var gulpIf = require('gulp-if');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
-var pkg = require('./package.json');
 
 // Assets for the project
 var Assets = {
@@ -64,4 +63,3 @@ gulp.task('default', ['eslint', 'uglify']);
 
 // 'gulp eslint' to check the syntax of the main js file(s)
 // 'gulp uglify' to uglify the main file
-// 'gulp version' to update the version numbers based on the main file version comment
